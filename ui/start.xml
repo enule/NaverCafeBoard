@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Created by http://cafe.naver.com/citrineframework
+	You can freely copy, distribute, modify for commercial or non-commercial purposes.
+-->
+<MOML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.applusform.com/xsd/moml_ui.xsd" version="1.1.7">
+	<UILAYOUT portrait="720,1096" landscape="720,1096">
+		<NAVIGATIONCONTAINER id="navigation" layout="0,0,720,1096" onBackKey="function.onBackKey">
+			<VIEWITEM id="main" src="main.xml" />
+		</NAVIGATIONCONTAINER>
+	</UILAYOUT>
+
+	<FUNCTION id="onBackKey" >
+		<!-- boardContainer가 보이면 back키를 누르면 닫도록 합니다.-->
+		<RETURN condition="navigation.main.boardContainer.visible != 'visible'" cmd="false" />
+		<CMD cmd="function.navigation.main.hideBoardContainer" />
+		<RETURN cmd="true"/>
+	</FUNCTION>
+</MOML>

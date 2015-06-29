@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Created by http://cafe.naver.com/citrineframework
+	You can freely copy, distribute, modify for commercial or non-commercial purposes.
+-->
+<MOML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.applusform.com/xsd/moml_ui.xsd" version="1.1.7">
+	<THEMES>
+		<THEME id="fontLabel" fontFace="/res/UnGraphicBold.ttf" textColor="#ffffff" />
+		<THEME id="menuBtn" parent="fontLabel" layout="0,0,200sr,200sr" shape="circle" visible="invisible" align="linear:center" fontSize="40"  padding="10,10,10,10" multiLine="false"/>
+		<THEME id="menuLabel" parent="fontLabel" fontSize="40" layout="180sr,180sr" textAlign="center" />
+	</THEMES>
+	
+	<UILAYOUT portrait="720,1096" landscape="720,1096">
+		<WINDOW layout="0,0,720,1096" align="relative" defaultImg="#232529">
+			<LABEL themeId="fontLabel" layout="0,0,720,200" text="MOML 모바일 개발 Cafe" fontSize="50" textAlign="center" />
+
+			<!-- ### x,y 는 원의 중심점 좌표입니다. 메뉴 개수에 따라 360,550 을 중심으로 주위에 적절하게 배치합니다.-->
+			<!-- ### boardUrl 은 네이버 카페 모바일 웹 주소입니다. 원하는 게시판의 clubid, menuId를 바꿔줍니다.-->
+			<!-- ### text 는 게시글 목록의 제목으로도 사용됩니다.-->
+			<STYLEBUTTON id="menu1" x="360" y="300" themeId="menuBtn" defaultImg="#008000" onClick="function.moveAni(caller)" text="전체글" boardUrl="http://m.cafe.naver.com/citrineframework.cafe?iframe_url=/ArticleList.nhn%3Fsearch.clubid=24809068%26search.boardtype=L"/>
+			<STYLEBUTTON id="menu2" x="600" y="500" themeId="menuBtn" defaultImg="#0070ff" onClick="function.moveAni(caller)" text="Q &amp; A" boardUrl="http://m.cafe.naver.com/ArticleList.nhn?search.clubid=24809068&amp;search.menuid=27&amp;search.boardtype=Q"/>
+			<STYLEBUTTON id="menu3" x="520" y="800" themeId="menuBtn" defaultImg="#ff7000" onClick="function.moveAni(caller)" text="개발 TIP" boardUrl="http://m.cafe.naver.com/ArticleList.nhn?search.clubid=24809068&amp;search.menuid=58&amp;search.boardtype=L"/>
+			<STYLEBUTTON id="menu4" x="200" y="800" themeId="menuBtn" defaultImg="#00a0a0" onClick="function.moveAni(caller)" text="Advanced" boardUrl="http://m.cafe.naver.com/ArticleList.nhn?search.clubid=24809068&amp;search.menuid=32&amp;search.boardtype=L"/>
+			<STYLEBUTTON id="menu5" x="120" y="500" themeId="menuBtn" defaultImg="#8000a0" onClick="function.moveAni(caller)" text="부분UI예제" boardUrl="http://m.cafe.naver.com/ArticleList.nhn?search.clubid=24809068&amp;search.menuid=74&amp;search.boardtype=I"/>
+
+			<WINDOW id="mobileWebBtn" layout="0,1000,720,80" align="linear:subCenter|right" padding="10,0,10,0" visible="invisible">
+				<BUTTON layout="80sr,80sr" defaultImg="/res/mobileWeb.png" onClick="function.mobileWeb"/>
+				<LABEL themeId="fontLabel" layout="auto,80sr" text="모바일 카페홈" fontSize="20" margin="10,0,0,0" onClick="function.mobileWeb" textAlign="vCenter"/>
+			</WINDOW>
+
+		</WINDOW>
+
+		<WINDOW id="mainWindowBg" layout="0,0,720,1096" align="relative" visible="invisible" />
+		<STYLEBUTTON id="mainWindowCircle" layout="0,0,720,1096" shape="circle" borderStyle="" visible="invisible" align="relative" enabled="false"/>
+		<STYLEBUTTON id="titleLabel" themeId="fontLabel" layout="0,0,720,80" text="MENU" fontSize="30" textAlign="center" fontStyle="bold" textColor="#ffffff" visible="invisible" overlay1="gradation:tb|#80ffffff|#10000000" enabled="false"/>
+		<WINDOW id="closeBtn" layout="640,0,80,80" onClick="function.hideBoardContainer" visible="invisible" align="linear:center">
+			<LABEL layout="60sr,60sr" defaultImg="/res/cancel.png" />
+		</WINDOW>
+		<CONTAINER id="boardContainer" layout="0,80,720,1016" visible="invisible"/>
+	</UILAYOUT>
+
+	<CMD cmd="function.init" />
+
+	<FUNCTION id="init" >
+		<CMD cmd="function.initMenuItem(menu1)" />
+		<CMD cmd="function.initMenuItem(menu2)" />
+		<CMD cmd="function.initMenuItem(menu3)" />
+		<CMD cmd="function.initMenuItem(menu4)" />
+		<CMD cmd="function.initMenuItem(menu5)" />
+
+		<CMD cmd="function.showMenuItem(menu1)" delay="100"/>
+		<CMD cmd="function.showMenuItem(menu2)" delay="200"/>
+		<CMD cmd="function.showMenuItem(menu3)" delay="300"/>
+		<CMD cmd="function.showMenuItem(menu4)" delay="400"/>
+		<CMD cmd="function.showMenuItem(menu5)" delay="500"/>
+
+		<CMD cmd="animation.show('mobileWebBtn', 'fade', '', 500, '')" delay="700" />
+	</FUNCTION>
+
+	<!-- x, y를 중심으로 배치 -->
+	<FUNCTION id="initMenuItem(uiObj)" >
+		<CMD cmd ="r = uiObj.width / 2" />  <!-- 반지름 r -->
+		<CMD cmd="uiObj.left = uiObj.x - r" />
+		<CMD cmd="uiObj.top = uiObj.y - r" />
+	</FUNCTION>
+
+	<!-- 처음 버튼 등장 효과 -->
+	<FUNCTION id="showMenuItem(uiObj)" >
+		<CMD cmd ="r = uiObj.width / 2" />
+		<CMD cmd="animation.flyIn(uiObj, r/2,r/2, r, r, 'easeOut3', 500, '')" />
+	</FUNCTION>
+
+	<FUNCTION id="moveAni(uiObj)">
+		<CMD cmd="userVariable.lastMenuBtnId = uiObj.id" />
+		<CMD cmd="userVariable.boardUrl = uiObj.boardUrl" />
+		<CMD cmd="userVariable.boardColor = uiObj.defaultImg" /> <!-- 버튼 색상을 배경으로 복사한다.-->
+		<CMD cmd="uiObj.enabled = false" />
+		<CMD cmd="uiObj.enabled = true" delay="1000" />
+		<CMD cmd="mainWindowCircle.defaultImg = uiObj.defaultImg"/>
+		<CMD cmd="mainWindowBg.defaultImg = uiObj.defaultImg"/>
+		<CMD cmd="animation.move(uiObj, 360 - uiObj.x, 550 - uiObj.y, 'easeOut3', 200, 'function.mainWindowAni(uiObj)')" />
+	</FUNCTION>
+	<FUNCTION id="mainWindowAni(uiObj)">
+		<CMD cmd="titleLabel.text = uiObj.text"/>
+		<CMD cmd="animation.flyIn('mainWindowCircle', mainWindowCircle.width/2, mainWindowCircle.height/2, 0, 'easeOut3', 500, '')" />
+		<CMD cmd="animation.show('mainWindowBg', 'fade', '', 600, '')" />
+		<CMD cmd="animation.show('closeBtn', 'fade', '', 600, '')" />
+		<CMD cmd="animation.flyIn('titleLabel', 0, 430, titleLabel.width, titleLabel.height,'', 200, '')" delay="600" />
+		<CMD cmd="boardContainer.src='board.xml'" delay="900" />
+		<CMD cmd="animation.flyIn('boardContainer', 0, 1016, boardContainer.width, boardContainer.height, '', 200, '')" delay="700" />
+	</FUNCTION>
+
+	<FUNCTION id="hideBoardContainer">
+		<CMD cmd="closeBtn.enabled = false" />
+		<CMD cmd="closeBtn.enabled = true" delay="1000" />
+		<CMD cmd="animation.flyOut('boardContainer', 0, 1016, boardContainer.width, boardContainer.height, '', 200, '')" />
+		<CMD cmd="animation.flyOut('titleLabel', 0, 500, titleLabel.width, titleLabel.height, '', 200, 'function.mainWindowAniExit2')" />
+	</FUNCTION>
+
+	<FUNCTION id="mainWindowAniExit2">
+		<CMD delay="200" >
+			<CMD cmd="titleLabel.visible = 'invisible'" />
+			<CMD cmd="animation.hide('mainWindowBg', 'fade', '', 600, '')" />
+			<CMD cmd="animation.hide('closeBtn', 'fade', '', 600, '')" />
+			<CMD cmd="animation.flyOut('mainWindowCircle', mainWindowCircle.width/2, mainWindowCircle.height/2, 0,\'easeOut3', 500, '')" />
+			<CMD cmd="x = application.runScript(userVariable.lastMenuBtnId + '.x')" />
+			<CMD cmd="y = application.runScript(userVariable.lastMenuBtnId + '.y')" />
+			<CMD cmd="animation.move(userVariable.lastMenuBtnId, x -360, y - 550, '', 200, '')" />
+			<CMD cmd="boardContainer.clear" delay="600" />
+		</CMD>
+	</FUNCTION>
+
+	<FUNCTION id="mobileWeb">
+		<CMD cmd="userVariable.title = 'MOML 모바일 개발'" />
+		<CMD cmd="userVariable.url = 'http://m.cafe.naver.com/citrineframework'" />
+		<CMD cmd="userVariable.boardColor = '#008000'" />
+		<CMD cmd="container.open('webViewPopup.xml', 'mobileWeb')"/>
+	</FUNCTION>
+</MOML>

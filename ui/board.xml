@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Created by http://cafe.naver.com/citrineframework
+    You can freely copy, distribute, modify for commercial or non-commercial purposes.
+-->
+<MOML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.applusform.com/xsd/moml_ui.xsd" version="1.1.1">
+
+	<THEMES>
+		<THEME id="fontLabel" fontFace="/res/UnGraphicBold.ttf" textColor="#ffffff" />
+		<THEME id="styleBtn" layout="100,80" parent="fontLabel" overlay1="gradation:#80ffffff|#10000000" borderStyle="solid:2|#30ffffff" shape="roundRect(10)" fontSize="30" />
+	</THEMES>
+
+	<UILAYOUT portrait="720,1096" landscape="720,1096" >
+		<WINDOW id="title" layout="0,0,720,1096" >
+			<LIST2 id="board" layout="0,0,720,996"  dataList="/DATA/ITEM" divider="none" defaultImg="#c0ffffff">
+				<LISTLAYOUT>
+				<WINDOW id="listitem" layout="0,0,720,120" >
+
+					<STYLEBUTTON layout="10,10,700,100"  defaultImg="#dfdfdf"  shape="roundRect(10)" borderStyle="emboss" overlay1="gradation:tb|#a0ffffff|#dfdfdf">
+
+						<WINDOW layout="20,10,670,80" onClick="function.openItemLink(xpath.evaluate('@link'))">
+							<LABEL text="{xpath.evaluate('@title')}" minFontSize="0" fontSize="28"  fontStyle="bold" textColor="#333333" layout="0,0,670,30" />
+							<LABEL text="{xpath.evaluate('@info')}" ellipsis="end" minFontSize="0" fontSize="23" multiLine="true" textColor="#777777" layout="0,40,400,40" padding="10,5,0,5"/>
+							<LABEL text="{xpath.evaluate('@reply')} {xpath.evaluate('@comment')}" ellipsis="end" minFontSize="10" fontSize="20" textColor="#336633" layout="550,50,120,40" textAlign="right"/>
+						</WINDOW>
+					</STYLEBUTTON>
+
+				</WINDOW>
+			</LISTLAYOUT>
+			</LIST2>
+			<WINDOW id="loading" layout="0,0,720,996" defaultImg="#ffffff" align="linear:center">
+				<!--<LABEL text="loading..." fontSize="30"/> -->
+				<WINDOW layout="100sr,100sr" defaultImg="/res/sandglass.png" />
+			</WINDOW>
+			
+			<WINDOW layout="0,996,720,100"  >
+				<WINDOW layout="0,0,720,100" align="linear:center">
+					<STYLEBUTTON id="prevBtn" themeId="styleBtn" _text="이전" onClick="function.prevPage"  overlay2="color:#ffffff|shape=leftTriangle" padding2="30,25,40,25" visible="invisible"/>
+					<LABEL id="curPage" text="1-20" layout="auto,80" fontSize="30" textAlign="center" textColor="#ffffff" padding="20,0,20,0"/>
+					<STYLEBUTTON id="nextBtn" themeId="styleBtn" _text="다음" onClick="function.nextPage" overlay2="color:#ffffff|shape=rightTriangle" padding2="40,25,30,25"  />
+				</WINDOW>
+				<STYLEBUTTON id="firstBtn" themeId="styleBtn" text="처음" onClick="function.first" layout="10,10,100,80"/>
+				<STYLEBUTTON themeId="styleBtn" onClick="function.refresh" layout="610,10,100,80" align="linear:center">
+					<LABEL layout="50sr,50sr" defaultImg="/res/refresh.png" />
+				</STYLEBUTTON>
+			</WINDOW>
+
+			<AGATEWEBVIEW id="webView" layout="0,585,720,511" jsBridge="false" visible="invisible">
+				<LINKMAP>
+					<LINK url="http*" jsPlugin="getListData.js" onFinish="function.hideLoading" delay="5000"/>
+				</LINKMAP>
+			</AGATEWEBVIEW>
+		</WINDOW>
+	</UILAYOUT>
+
+	<CMD cmd="userVariable.page = 1" />
+	<CMD cmd="function.goPage(userVariable.page)" />
+	
+	<FUNCTION id="goPage(num)" >
+		<CMD cmd="board.dataSource=''"/>
+		<CMD cmd="loading.visible=true"/>
+		<CMD cmd="webView.src = userVariable.boardUrl + '&amp;search.page=' + num" />
+		<CMD cmd="curPage.text = ((num -1) * 20 + 1) + '-' + (num * 20)" />
+		<CMD condition="userVariable.page == 1" cmd ="prevBtn.visible=false" elseCmd="prevBtn.visible=true"/>
+	</FUNCTION>
+
+	<FUNCTION id="first" >
+		<CMD cmd="function.goPage((userVariable.page = 1))" />
+	</FUNCTION>
+
+	<FUNCTION id="prevPage" >
+		<CMD cmd="function.goPage(--userVariable.page)" />
+	</FUNCTION>
+	
+	<FUNCTION id="nextPage" >
+		<CMD cmd="function.goPage(++userVariable.page)" />
+	</FUNCTION>
+
+	<FUNCTION id="refresh" >
+		<CMD cmd="function.goPage(userVariable.page)" />
+	</FUNCTION>
+
+	<FUNCTION id="hideLoading">
+		<CMD cmd="animation.hide('loading', 'fade', '', 1000, '')" />
+	</FUNCTION>
+
+	<FUNCTION id="loadListData(dataXML, dataCount)">
+		<CMD condition="dataCount == 0" cmd="device.systemPopup('게시글을 불러올 수 없습니다.')"/>
+		<CMD cmd="board.dataSource = dataXML" />
+		<CMD condition="dataCount == 20" cmd ="nextBtn.visible=true" elseCmd="nextBtn.visible=false"/>
+	</FUNCTION>
+
+	<FUNCTION id="openItemLink(url)">
+		<CMD cmd="userVariable.title = xpath.evaluate('@title')" />
+		<CMD cmd="userVariable.url = string.replace(url, 'http://cafe.', 'http://m.cafe.')" />
+		<CMD cmd="root.open('webViewDetailPopup.xml', 'root.webViewDetail')" />
+	</FUNCTION>
+	
+	<FUNCTION id="unescape(str)" >
+		<CMD cmd="str=string.replace(str, '&amp;nbsp;', ' ')" />
+		<CMD cmd="str=string.replace(str, '&amp;amp;', '&amp;')" />
+		<CMD cmd="str=string.replace(str, '&amp;gt;', '&gt;')" />
+		<CMD cmd="str=string.replace(str, '&amp;lt;', '&lt;')" />
+	</FUNCTION>
+</MOML>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Created by ApplusForm.com on 2013.8.5
+
+	Permission is granted to copy, distribute, modify under the terms of ApplusForm License.
+
+	Copyright (C) 2014 ApplusForm.com. All rights reserved.
+-->
+<MOML version="1.1.5" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.applusform.com/xsd/moml_ui.xsd">
+	<THEMES >
+		<THEME id="titleLabel" textColor="#ffffff" textShadow="#333333" defaultImg="#00000000" fontSize="15" textAlign="left|center" padding="10,0,0,0"/>
+	</THEMES>
+
+	<UILAYOUT portrait="720,1230" landscape="720,1230">
+		<POPUP layout="0,0,720,1230" showEffect="fade:400" hideEffect="slide:400,down">
+			<AGATEWEBVIEW id="webView" layout="0,0,720,1230" controls="none" supportZoom="false">
+				<LINKMAP>
+					<LINK url="*" delay="1"/>
+					<!-- 페이지 이동시 깜빡임 방지. -->
+					<LINK url="*" onFinish="function.updateToolbar"/>
+				</LINKMAP>
+			</AGATEWEBVIEW>
+
+			<!-- ### 하단 툴바를 완전히 없애려면 visible="invisible" 로 변경하십시오. -->
+			<WINDOW id="toolbar" layout="0,1180,720,110" visible="visible">
+				<WINDOW layout="0,50,720,60" align="linear:horizontal|vCenter|hJustify" defaultImg="#a0c0c0c0" padding="0,0,60,0">
+					<BUTTON id="back" layout="60,60" margin="10,0,10,0" defaultImg="/res/webbackgray.png" onClick="webView.back"/>
+					<BUTTON id="forward" layout="60,60" margin="10,0,10,0" defaultImg="/res/webforgray.png" onClick="webView.forward"/>
+					<BUTTON layout="60,60" margin="10,0,10,0" defaultImg="/res/webrefresh.png" onClick="webView.refresh"/>
+					<BUTTON layout="60,60" margin="10,0,10,0" defaultImg="/res/webhome.png" onClick="webView.clear; webView.src=webView.homePage"/>
+					<BUTTON layout="60,60" margin="10,0,10,0" defaultImg="/res/exit.png" onClick="container.close"/>
+				</WINDOW>
+				<WINDOW layout="660,0,60,110" onClick="function.onMenuKey" />
+				<!-- 버튼 위아래 근처를 터치해도 동작하도록 한다.-->
+				<BUTTON id="gripper" layout="660,20,60,30" defaultImg="/res/gripperDown.png" onClick="function.onMenuKey"/>
+			</WINDOW>
+		</POPUP>
+	</UILAYOUT>
+
+	<CMD cmd="webView.homePage = userVariable.url" />
+	<CMD cmd="webView.src=webView.homePage" />
+	<!-- ### 하단 툴바를 아래로 감춘상태로 시작하려면 아래 명령을 지우십시오. -->
+	<CMD cmd="function.onMenuKey" delay="1500"/>
+
+	<!-- menu key를 눌렀을 때 -->
+	<FUNCTION id="onMenuKey">
+		<CMD condition="toolbar.top lt 1150">
+			<CMD cmd="animation.move('toolbar', 0, 60, 'easeIn3', 300, '')"/>
+			<CMD cmd="gripper.defaultImg='/res/gripperUp.png'"/>
+			<ELSECMD cmd="animation.move('toolbar', 0, -60, 'easeIn3', 300, '')"/>
+			<ELSECMD cmd="gripper.defaultImg='/res/gripperDown.png'"/>
+		</CMD>
+	</FUNCTION>
+
+	<FUNCTION id="updateToolbar">
+		<CMD condition="webView.canBack" cmd="back.defaultImg='/res/webback.png'" elseCmd="back.defaultImg='/res/webbackgray.png'"/>
+		<CMD condition="webView.canForward" cmd="forward.defaultImg='/res/webfor.png'" elseCmd="forward.defaultImg='/res/webforgray.png'"/>
+	</FUNCTION>
+</MOML>
