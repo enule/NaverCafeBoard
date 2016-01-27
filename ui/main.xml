@@ -17,7 +17,7 @@
 			<!-- ### x,y 는 원의 중심점 좌표입니다. 메뉴 개수에 따라 360,550 을 중심으로 주위에 적절하게 배치합니다.-->
 			<!-- ### boardUrl 은 네이버 카페 모바일 웹 주소입니다. 원하는 게시판의 clubid, menuId를 바꿔줍니다.-->
 			<!-- ### text 는 게시글 목록의 제목으로도 사용됩니다.-->
-			<STYLEBUTTON id="menu1" x="360" y="300" themeId="menuBtn" defaultImg="#008000" onClick="function.moveAni(caller)" text="전체글" boardUrl="http://m.cafe.naver.com/citrineframework.cafe?iframe_url=/ArticleList.nhn%3Fsearch.clubid=24809068%26search.boardtype=L"/>
+			<STYLEBUTTON id="menu1" x="360" y="300" themeId="menuBtn" defaultImg="#008000" onClick="function.moveAni(caller)" text="전체글" boardUrl="http://m.cafe.naver.com/storyloveiu.cafe?iframe_url=/ArticleList.nhn%3Fsearch.clubid=22355224%26search.menuid=19%26search.boardtype=L"/>
 			<STYLEBUTTON id="menu2" x="600" y="500" themeId="menuBtn" defaultImg="#0070ff" onClick="function.moveAni(caller)" text="Q &amp; A" boardUrl="http://m.cafe.naver.com/ArticleList.nhn?search.clubid=24809068&amp;search.menuid=27&amp;search.boardtype=Q"/>
 			<STYLEBUTTON id="menu3" x="520" y="800" themeId="menuBtn" defaultImg="#ff7000" onClick="function.moveAni(caller)" text="개발 TIP" boardUrl="http://m.cafe.naver.com/ArticleList.nhn?search.clubid=24809068&amp;search.menuid=58&amp;search.boardtype=L"/>
 			<STYLEBUTTON id="menu4" x="200" y="800" themeId="menuBtn" defaultImg="#00a0a0" onClick="function.moveAni(caller)" text="Advanced" boardUrl="http://m.cafe.naver.com/ArticleList.nhn?search.clubid=24809068&amp;search.menuid=32&amp;search.boardtype=L"/>
